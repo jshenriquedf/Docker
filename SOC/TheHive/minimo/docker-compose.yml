@@ -11,7 +11,12 @@ services:
       #- '0.0.0.0:9200:9200'
       - ${ES_PORT}:9200
     environment:
+      - http.host=0.0.0.0
       - discovery.type=single-node
+      - cluster.name=hive
+      - thread_pool.search.queue_size=100000
+      - thread_pool.write.queue_size=10000
+      - gateway.recover_after_nodes=1
       - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     mem_limit: ${MEM_LIMIT}

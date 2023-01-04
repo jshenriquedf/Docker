@@ -11,16 +11,9 @@ services:
       #- '0.0.0.0:9200:9200'
       - ${ES_PORT}:9200
     environment:
-      - http.host=0.0.0.0
       - discovery.type=single-node
-      - cluster.name=hive
-      - thread_pool.search.queue_size=100000
-      - thread_pool.write.queue_size=10000
-      - gateway.recover_after_nodes=1
-      - bootstrap.memory_lock=true
       - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - MAX_LOCKED_MEMORY=unlimited
     mem_limit: ${MEM_LIMIT}
     ulimits:
       nofile:
@@ -36,12 +29,17 @@ services:
     container_name: minio
     image: quay.io/minio/minio:${MINIO_VERSION}
     hostname: minio
+    restart: unless-stopped
     ports:
       #- "9001:9001"
       - ${MINIO_PORT}:9001
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_BROWSER_REDIRECT_URL=https://minio
+      - MINIO_DOMAIN=minio
+      - VIRTUAL_HOST=minio
+      - LETSENCRYPT_HOST=minio
     command: server --console-address ":9001" /data
     # command: ["minio", "server", "/data", "--console-address", ":9001"]
     volumes:

@@ -8,7 +8,8 @@ services:
     restart: unless-stopped
     user: '1000:0'
     ports:
-      - '0.0.0.0:9200:9200'
+      #- '0.0.0.0:9200:9200'
+      - ${ES_PORT}:9200
     environment:
       - http.host=0.0.0.0
       - discovery.type=single-node
